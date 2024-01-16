@@ -1,0 +1,14 @@
+package com.example.room.addtasks.Data
+
+import androidx.room.Database
+import androidx.room.RoomDatabase
+
+//TaskEntity::class te dará una referencia al objeto KClass que representa la clase TaskEntity.
+//Esto es útil, por ejemplo, cuando necesitas trabajar con la clase de manera dinámica,
+//como para obtener información sobre sus mienbros, crear instancias de la clase, etc.
+
+@Database(entities = [TaskEntity::class], version = 1)
+abstract class TasksManageDatabase: RoomDatabase() {
+    //DAO
+    abstract fun taskDao(): TaskDao
+}
