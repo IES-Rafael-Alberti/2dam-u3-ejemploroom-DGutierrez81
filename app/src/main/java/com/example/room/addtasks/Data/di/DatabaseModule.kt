@@ -31,8 +31,7 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideTasksManageDatabase(@ApplicationContext appContext: Context){
+    fun provideTasksManageDatabase(@ApplicationContext appContext: Context): TasksManageDatabase {
         //Aquí ralmente es dónde estamos CREANDO la base de datos...
-        return Room.databaseBuilder(appContext, TasksManageDatabase::class.java, "TaskdDatabase").build()
-    }
+        return Room.databaseBuilder(appContext, TasksManageDatabase::class.java, "TaskDatabase").build()    }
 }
