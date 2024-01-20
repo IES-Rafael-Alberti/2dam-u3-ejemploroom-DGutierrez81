@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.room.addtasks.Domain.AddTaskUseCase
+import com.example.room.addtasks.Domain.DeleteTaskUseCase
 import com.example.room.addtasks.Domain.GetTasksUseCase
+import com.example.room.addtasks.Domain.UpdateTaskUseCase
 import com.example.room.addtasks.ui.model.TaskModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -24,7 +26,9 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class TasksViewModel@Inject constructor(
     private val addTaskUseCase: AddTaskUseCase,
-    getTasksUseCase: GetTasksUseCase
+    getTasksUseCase: GetTasksUseCase,
+    private val updateTaskUseCase: UpdateTaskUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase
 ): ViewModel() {
     private val _showDialog = MutableLiveData<Boolean>()
     val showDialog: LiveData<Boolean> = _showDialog
@@ -86,6 +90,9 @@ class TasksViewModel@Inject constructor(
         _tasks.remove(task)
 
          */
+        viewModelScope.launch {
+            deleteTaskUseCase(taskModel)
+        }
     }
 
     fun onCheckBoxSelected(taskModel: TaskModel) {
@@ -103,5 +110,9 @@ class TasksViewModel@Inject constructor(
         //El truco está en que no se modifica solo la propiedad selected de tasks[index],
         //sino que se vuelve a reasignar para que la vista vea que se ha actualizado un item y se recomponga.
         //_tasks[index] = _tasks[index].let { it.copy(selected = !it.selected) }
+
+        viewModelScope.launch {
+            updateTaskUseCase(taskModel.copy(selected = !taskModel.selected))
+        }
     }
 }
